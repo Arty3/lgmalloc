@@ -12,6 +12,10 @@
 static ALWAYS_INLINE
 void __lgfree_impl(void *ptr)
 {
+#if !defined(MANUAL_HANDLE_LGMALLOC_INIT)
+	lgmalloc_init();
+#endif
+
 	if (UNLIKELY(!ptr))
 		return;
 }

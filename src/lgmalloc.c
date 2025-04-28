@@ -14,8 +14,9 @@
 static ALWAYS_INLINE
 void *__lgmalloc_impl(size_t size)
 {
-	/* Only inits on first call */
+#if !defined(MANUAL_HANDLE_LGMALLOC_INIT)
 	lgmalloc_init();
+#endif
 
 	if (UNLIKELY(size > LGMALLOC_MAX_ALLOC_SIZE))
 	{

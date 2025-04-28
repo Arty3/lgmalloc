@@ -64,14 +64,15 @@ You can use these overloads within your C++ code to use lgmalloc.
 
 ### ⚙ Configuration
 
-Compile using the following flags for optional configuration:
+Compile using the following flags (-D...) for optional configuration:
 
 | Flag | Description |
 |:-----|:------------|
-| `-DWEAK_LGMALLOC_REPLACE_STDLIB` | Replace the stdlib `malloc(3)` implementation (overrideable) |
-| `-DFORCE_LGMALLOC_REPLACE_STDLIB` | Forcefully replace the stdlib `malloc(3)` implementation |
-| `-DLGMALLOC_MMAP_THRESHOLD=` | Set the allocator's mmap call threshold as a positive number (currently 256kb)|
-| `-DLGMALLOC_MAX_ALLOC_SIZE=` | Set the allocator's maximum allocation size as a positive number (currently `SIZE_MAX / 2`)|
+| `WEAK_LGMALLOC_REPLACE_STDLIB` | Replace the stdlib `malloc(3)` implementation (overrideable) |
+| `FORCE_LGMALLOC_REPLACE_STDLIB` | Forcefully replace the stdlib `malloc(3)` implementation |
+| `MANUAL_HANDLE_LGMALLOC_INIT` | Transfer initialization & cleanup responsibility to you |
+| `LGMALLOC_MMAP_THRESHOLD=` | Set the allocator's mmap call threshold as a positive number (currently 256kb)|
+| `LGMALLOC_MAX_ALLOC_SIZE=` | Set the allocator's maximum allocation size as a positive number (currently `SIZE_MAX / 2`)|
 
 #### See [lgmalloc_config.h](./src/api/lgmalloc_config.h) for more
 
