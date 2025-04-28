@@ -8,8 +8,6 @@
 
 #include "internal_headers/lgmalloc_global_include.h"
 
-/* Global initializer flag, initializes on first call of api */
-
 static int __is_lgmalloc_init_g = 0;
 
 static ALWAYS_INLINE void lgmalloc_set_init(int value)
@@ -17,9 +15,15 @@ static ALWAYS_INLINE void lgmalloc_set_init(int value)
 	__is_lgmalloc_init_g = !!value;
 }
 
-static ALWAYS_INLINE int lgmalloc_is_init(void)
+static ALWAYS_INLINE int __lgmalloc_is_init(void)
 {
 	return __is_lgmalloc_init_g;
+}
+
+/* Exposing this for critical points that require extra safety */
+int lgmalloc_is_init(void)
+{
+	return __lgmalloc_is_init();
 }
 
 /* For scope and responsibility reasons this is
@@ -28,7 +32,7 @@ static ALWAYS_INLINE int lgmalloc_is_init(void)
 void lgmalloc_init(void)
 {
 	/* More often than not will be initialized */
-	if (LIKELY(lgmalloc_is_init()))
+	if (LIKELY(__lgmalloc_is_init()))
 		return;
 
 	/* logic */
@@ -39,6 +43,7 @@ void lgmalloc_init(void)
 /* Just incase.. */
 void lgmalloc_reinit(void)
 {
+	/* Cleanup */
 	lgmalloc_set_init(0);
 	lgmalloc_init();
 }

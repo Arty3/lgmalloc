@@ -12,7 +12,7 @@
 #error "lgmalloc requires the clang or gcc compiler"
 #endif
 
-#if defined(_WIN32) || defined(__WIN32__) || defined(_WIN64)
+#if defined(_WIN32) || defined(__WIN32__) || defined(_WIN64) || defined(__CYGWIN__)
 #error "detected Windows platform, lgmalloc requires a unix platform"
 #endif
 

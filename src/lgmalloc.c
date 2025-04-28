@@ -12,6 +12,12 @@
 #include <errno.h>
 
 static ALWAYS_INLINE
+void *do_alloc_size_1(void)
+{
+	/* Quickly do alloc of size 1 for param size 0 */
+}
+
+static ALWAYS_INLINE
 void *__lgmalloc_impl(size_t size)
 {
 #if !defined(MANUAL_HANDLE_LGMALLOC_INIT)
@@ -25,9 +31,7 @@ void *__lgmalloc_impl(size_t size)
 	}
 
 	if (UNLIKELY(!size))
-	{
-		/* Quickly do alloc of size 1 */
-	}
+		return do_alloc_size_1();
 }
 
 void *__lgmalloc_wrapper(size_t size)
