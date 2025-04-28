@@ -87,6 +87,7 @@ typedef struct __segment_t
 	chunk_t				*chunk_list;
 	size_t				chunk_count;
 	size_t				segment_size;
+	uintptr_t			mmap_start;
 }	segment_t;
 
 /* 
