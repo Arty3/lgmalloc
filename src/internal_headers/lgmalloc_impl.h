@@ -1,0 +1,22 @@
+/* ******************************************** */
+/*                                              */
+/*   lgmalloc_impl.h                            */
+/*                                              */
+/*   Author: https://github.com/Arty3           */
+/*                                              */
+/* ******************************************** */
+
+#ifndef __LGMALLOC_IMPL_H
+#define __LGMALLOC_IMPL_H
+
+void lgmalloc_init(void);
+void lgmalloc_reinit(void);
+
+/* Wrappers for internal usage */
+
+void *__lgmalloc_wrapper(size_t size);
+void __lgfree_wrapper(void *ptr);
+void *__lgcalloc_wrapper(size_t nmemb, size_t size);
+void *__lgrealloc_wrapper(void *ptr, size_t size);
+
+#endif /* __LGMALLOC_IMPL_H */

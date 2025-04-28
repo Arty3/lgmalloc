@@ -1,0 +1,35 @@
+/* ******************************************** */
+/*                                              */
+/*   lgfree.c                                   */
+/*                                              */
+/*   Author: https://github.com/Arty3           */
+/*                                              */
+/* ******************************************** */
+
+#include "internal_headers/lgmalloc_global_include.h"
+#include "api/lgmalloc_config.h"
+
+static ALWAYS_INLINE
+void __lgfree_impl(void *ptr)
+{
+	if (UNLIKELY(!ptr))
+		return;
+}
+
+void __lgfree_wrapper(void *ptr)
+{
+	__lgfree_impl(ptr);
+}
+
+EXTERN_STRONG_ALIAS(__lgfree_wrapper, lgfree);
+
+/* -DFORCE_LGMALLOC_REPLACE_STDLIB */
+#if defined(FORCE_LGMALLOC_REPLACE_STDLIB)
+EXTERN_STRONG_ALIAS(lgfree, free);
+#endif
+
+/* -DWEAK_LGMALLOC_REPLACE_STDLIB */
+#if defined(WEAK_LGMALLOC_REPLACE_STDLIB)
+EXTERN_WEAK_ALIAS(lgfree, free);
+#endif
+
