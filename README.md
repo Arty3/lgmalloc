@@ -10,9 +10,51 @@ This malloc implementation aims to provide a viable alternative to bulky allocat
 
 The allocator is implemented in C.
 
+## 🚀 Using
+
+### 💻 Basic Setup
+
+Include the respective API header in your project:
+
+- **[lgmalloc.h](./src/api/lgmalloc.h)** - The main exposed API
+- **[lgmalloc_cpp_operators.hpp](./src/api/lgmalloc_cpp_operators.hpp)** - C++ heap operator overloads
+
+Implement the [build](#-building) system and [configure](#-configuration) it in your project.
+
+Depending on your preferences you can now use `lgmalloc()`, `malloc()` or `new` to call the allocator.
+
+### 📚 Examples
+
+### 🌐 API
+
+The API is primarily exposed via [lgmalloc.h](./src/api/lgmalloc.h).
+
+Here, the main standardized definitions are available:
+
+```c
+void *lgmalloc(size_t size);
+
+void lgfree(void *ptr);
+
+void *lgcalloc(size_t nmemb, size_t size);
+
+void *lgrealloc(void *ptr, size_t size);
+```
+
+These are best used for explicit usage of the allocator.
+
+Optionally, an aliasing system is available, which can replace `malloc(3)` with lgmalloc.<br>
+This is configurable via the build system, see [configuration](#-configuration).
+
+For further details on malloc and related, see the [`malloc(3)`](https://man7.org/linux/man-pages/man3/malloc.3.html) man page.
+
+The `new` and `delete` operators from C++ are also present.<br>
+These are implemented in [lgmalloc_cpp_operators.hpp](./src/api/lgmalloc_cpp_operators.hpp).<br>
+You can use these overloads within your C++ code to use lgmalloc.
+
 ## 🛠 Building
 
-### 🌐 Platform
+### 🧱 Platform
 
 #### Currently requires:
 
@@ -39,8 +81,6 @@ The build system uses [make](https://www.gnu.org/software/make/). You can create
 
 There, you will find compilation target rules for your appropriate build.
 You can apply the [configuration](#-configuration) flags to the build system.
-
-## 🚀 Using
 
 ## 🧪 Testing
 

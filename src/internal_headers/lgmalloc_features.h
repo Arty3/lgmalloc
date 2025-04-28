@@ -86,7 +86,6 @@
 #else
 /* POSIX sysconf runtime fallback */
 #include <unistd.h>
-
 #ifdef _SC_PAGESIZE
 long __pagesz_g = sysconf(_SC_PAGESIZE);
 #define PAGE_SIZE __pagesz_g
