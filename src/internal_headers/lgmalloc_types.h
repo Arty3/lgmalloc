@@ -32,6 +32,7 @@ typedef struct __heap_t		heap_t;
 typedef struct __block_t
 {
 	struct __block_t	*next;
+	uintptr_t			alloc;
 	/* Remove size field later if not needed */
 	size_t				size;
 }	block_t;
