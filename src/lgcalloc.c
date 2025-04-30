@@ -7,7 +7,6 @@
 /* ******************************************** */
 
 #include "internal_headers/lgmalloc_global_include.h"
-#include "internal_headers/lgmalloc_impl.h"
 #include "api/lgmalloc_config.h"
 
 #include <string.h>

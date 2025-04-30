@@ -26,6 +26,14 @@ int lgmalloc_is_init(void)
 	return __lgmalloc_is_init();
 }
 
+void *do_init_mmap_call()
+{
+}
+
+void config_init(void)
+{
+}
+
 /* For scope and responsibility reasons this is
  * the only function that handles the init flags.
  * Either the caller handles the flag or the callee. */

@@ -39,7 +39,9 @@ void *__lgmalloc_wrapper(size_t size)
 	return __lgmalloc_impl(size);
 }
 
-EXTERN_STRONG_ALIAS(__lgmalloc_wrapper, lgmalloc);
+/* Don't alias to lgmalloc, we wrap it in a macro
+ * for sizeclass and mmap heuristic determinations */
+EXTERN_STRONG_ALIAS(__lgmalloc_wrapper, __lgmalloc);
 
 /* -DFORCE_LGMALLOC_REPLACE_STDLIB */
 #if defined(FORCE_LGMALLOC_REPLACE_STDLIB)

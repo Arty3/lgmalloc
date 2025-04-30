@@ -21,6 +21,7 @@
 
 #include "lgmalloc_features.h"
 #include "lgmalloc_types.h"
+#include "lgmalloc_impl.h"
 
 #include <stddef.h>
 

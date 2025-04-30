@@ -109,4 +109,9 @@ typedef struct __heap_t
 	size_t			segment_count;
 }	heap_t;
 
+#define LGMALLOC_BLOCK_T_SIZE	sizeof(block_t)
+#define LGMALLOC_CHUNK_T_SIZE	sizeof(chunk_t)
+#define LGMALLOC_SEGMENT_T_SIZE	sizeof(segment_t)
+#define LGMALLOC_HEAP_T_SIZE	sizeof(heap_t)
+
 #endif /* __LGMALLOC_TYPES_H */
