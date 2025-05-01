@@ -75,26 +75,29 @@ typedef struct
  * losing call patterns and compile-time constants.
  */
 
-#define __TRACK_LGMALLOC_RUNTIME_CALL(sz, file, line, func)						\
-	do																			\
-	{																			\
-		__attribute__((section(LGMALLOC_HEURISTICS_SECTION), used))				\
-		static _Thread_local TLS_MODEL lgmalloc_heuristic_entry_t				\
-		__lgmalloc_track_##file##_##line = {									\
-			.size = (sz), .file = #file, .line = (line),						\
-			.func = (func), .freq = 0, .is_const = 0							\
-		};	__lgmalloc_track_##file##_##line.freq++								\
+#define __TRACK_LGMALLOC_RUNTIME_CALL(sz, file, line, func)				\
+	do																	\
+	{																	\
+		__attribute__((section(LGMALLOC_HEURISTICS_SECTION), used))		\
+		static _Thread_local TLS_MODEL lgmalloc_heuristic_entry_t		\
+		__lgmalloc_track_##file##_##line = {							\
+			.size = (sz), .file = #file, .line = (line),				\
+			.func = (func), .freq = 0, .is_const = 0					\
+		};	__lgmalloc_track_##file##_##line.freq++						\
 	}	while (0)
 
-#define __TRACK_LGMALLOC_CONST_CALL(sz)												\	
-	do																				\
-	{																				\
-		__attribute__((section(LGMALLOC_HEURISTICS_SECTION ".const." #sz), used))	\
-		static _Thread_local TLS_MODEL lgmalloc_heuristic_entry_t					\
-		__lgmalloc_track_const_##__LINE__ = {										\
-			.size = (sz), .file = __FILE__, .line = __LINE__,						\
-			.func = __func__, .freq = 0, .is_const = 1								\
-		};	__lgmalloc_track_const_##__LINE__.freq++								\
+#define __LGMALLOC_CONST_SECTION(sz)	\
+	LGMALLOC_HEURISTICS_SECTION ".const." LGMALLOC_STRINGIFY(sz)
+
+#define __TRACK_LGMALLOC_CONST_CALL(sz)									\	
+	do																	\
+	{																	\
+		__attribute__((section(__LGMALLOC_CONST_SECTION(sz)), used))	\
+		static _Thread_local TLS_MODEL lgmalloc_heuristic_entry_t		\
+		__lgmalloc_track_const_##__FILE__##__LINE__ = {					\
+			.size = (sz), .file = __FILE__, .line = __LINE__,			\
+			.func = __func__, .freq = 0, .is_const = 1					\
+		};	__lgmalloc_track_const_##__FILE__##__LINE__.freq++			\
 	}	while (0)
 
 #define __TRACK_LGMALLOC_CALL(sz)					\

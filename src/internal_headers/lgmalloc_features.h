@@ -60,6 +60,8 @@
 #define EXTERN_STRONG_ALIAS(old, new) extern __typeof(old) \
 	new __attribute__((__alias__(#old)))
 
+#define LGMALLOC_STRINGIFY(x) #x
+
 /* Check if architecture is 64bit or 32bit */
 #if   __SIZEOF_POINTER__ == 8
 #define LGMALLOC_64_BIT
