@@ -20,6 +20,12 @@ void __set_current_thread_heap(heap_t *heap)
 	__current_thread_heap_g = heap;
 }
 
+static ALWAYS_INLINE
+heap_t *__unsafe_get_current_thread_heap(void)
+{
+	return __current_thread_heap_g;
+}
+
 ALWAYS_INLINE
 heap_t *__get_current_thread_heap(void)
 {
@@ -28,10 +34,10 @@ heap_t *__get_current_thread_heap(void)
 	 * The init function is responsible for proper init, 
 	 * there is also a possible recursion issue
 	 * here that needs special attention */
-	if (UNLIKELY(!lgmalloc_is_init()))
-		lgmalloc_init();
+	if (UNLIKELY(!__unsafe_get_current_thread_heap()))
+		thread_ctx_init();
 
-	return __current_thread_heap_g;
+	return __unsafe_get_current_thread_heap();
 }
 
 ALWAYS_INLINE
@@ -125,7 +131,9 @@ uintptr_t __get_tid(void)
  */
 static void thread_ctx_init(void)
 {
-} 
+	if (UNLIKELY(__unsafe_get_current_thread_heap()))
+		return;
+}
 
 EXTERN_STRONG_ALIAS(__get_tid, lgmalloc_get_tid);
 EXTERN_STRONG_ALIAS(__get_current_thread_heap, get_current_thread_heap);

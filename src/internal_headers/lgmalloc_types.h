@@ -103,8 +103,6 @@ typedef struct __segment_t
 typedef struct __heap_t
 {
 	uintptr_t		tid;
-	struct __heap_t	*next;
-	struct __heap_t	*prev;
 	segment_t		*segment_list;
 	size_t			segment_count;
 }	heap_t;

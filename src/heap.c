@@ -8,6 +8,27 @@
 
 #include "internal_headers/lgmalloc_global_include.h"
 
+#include <sys/mman.h>
+#include <errno.h>
+
+void *memory_map(size_t size)
+{
+	void *memory_map = mmap(
+		NULL, size,
+		PROT_READ   | PROT_WRITE,
+		MAP_PRIVATE | MAP_ANONYMOUS,
+		-1, 0
+	);
+
+	if (memory_map == MAP_FAILED)
+	{
+		errno = ENOMEM;
+		return NULL;
+	}
+
+	return memory_map;
+}
+
 /*
  * Allocate the first sizeof(heap_t) bytes onto the
  * memory mapping for the thread's heap structure.
@@ -18,9 +39,9 @@
  * to initialize the current thread context heap.
  */
 static inline
-heap_t *heap_init(void *mmap_region_ptr)
+heap_t *heap_init(void *__restrict__ allocation)
 {
-	heap_t *heap = (heap_t*)mmap_region_ptr;
+	heap_t *heap = (heap_t*)allocation;
 	memset_constexpr(heap, 0, sizeof(heap_t));
 
 	heap->tid = lgmalloc_get_tid();

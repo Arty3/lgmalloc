@@ -9,9 +9,11 @@
 #ifndef __LGMALLOC_IMPL_H
 #define __LGMALLOC_IMPL_H
 
-void	lgmalloc_init(void);
-void	lgmalloc_reinit(void);
-int		lgmalloc_is_init(void);
+void		lgmalloc_init(void);
+void		lgmalloc_reinit(void);
+int			lgmalloc_is_init(void);
+
+void		*memory_map(size_t size);
 
 uintptr_t	lgmalloc_get_tid(void);
 heap_t		*get_current_thread_heap(void);
