@@ -63,9 +63,9 @@
 #define LGMALLOC_STRINGIFY(x) #x
 
 /* Check if architecture is 64bit or 32bit */
-#if   __SIZEOF_POINTER__ == 8
+#if ARCH_64BIT
 #define LGMALLOC_64_BIT
-#elif __SIZEOF_POINTER__ == 4
+#else
 #define LGMALLOC_32_BIT
 #endif
 

@@ -12,6 +12,7 @@
 #include <limits.h>
 
 #define LGMALLOC_MAX_ALLOC_SIZE	SIZE_MAX / 2
-#define LGMALLOC_MMAP_THRESHOLD	262144			/* 256kb */
+
+#define LGMALLOC_MMAP_THRESHOLD	524288
 
 #endif /* __LGMALLOC_CONFIG_H */

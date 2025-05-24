@@ -1,10 +1,10 @@
 <h1 align="center">✨ lgmalloc ✨</h1>
 
-<h6 align="center"><em>The 'm' stands for mid</em></h6>
+<h6 align="center"><em>Modern, scalable, fast & efficient allocator</em></h6>
 
 ## 📝 Overview
 
-#### Currently WIP
+### Currently WIP (Not Finished)
 
 This malloc implementation aims to provide a viable alternative to bulky allocators in a modernized manner.
 

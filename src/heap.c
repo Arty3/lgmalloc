@@ -39,7 +39,7 @@ void *memory_map(size_t size)
  * to initialize the current thread context heap.
  */
 static inline
-heap_t *heap_init(void *__restrict__ allocation)
+heap_t *heap_init(void *__restrict__ allocation, size_t size)
 {
 	heap_t *heap = (heap_t*)allocation;
 	memset_constexpr(heap, 0, sizeof(heap_t));
@@ -48,3 +48,4 @@ heap_t *heap_init(void *__restrict__ allocation)
 
 	return heap;
 }
+
