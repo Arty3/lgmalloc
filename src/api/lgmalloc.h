@@ -15,8 +15,10 @@ extern "C" {
 
 #include <stddef.h>
 
+__attribute__((malloc, alloc_size(1)))
 void *lgmalloc(size_t size);
 void lgfree(void *ptr);
+__attribute__((malloc, alloc_size(1, 2)))
 void *lgcalloc(size_t nmemb, size_t size);
 void *lgrealloc(void *ptr, size_t size);
 

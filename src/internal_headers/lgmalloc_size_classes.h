@@ -143,7 +143,7 @@ static _Thread_local TLS_MODEL size_t __size_class_count_g
  * This function is also highly unsafe
  * and requires special attention.
  */
-static _Thread_local inline
+static COLD_CALL inline
 void __clean_size_classes(void)
 {
 #pragma clang diagnostic push
@@ -155,9 +155,18 @@ void __clean_size_classes(void)
 							  __size_class_count_g;
 
 	for (; rdp < edp; ++rdp)
+	{
+		/* Load next cache line early */
+		if (rdp + PREFETCH_STRUCTURE_LOOKAHEAD < edp)
+			PREFETCH_STRUCTURE(
+				rdp, CACHE_READ,
+				TEMPORAL_LOCALITY_HIGH
+			);
+
 		if (rdp->block_sz >= LGMALLOC_MMAP_THRESHOLD)
 			if (wrp++ != rdp)
 				*(wrp - 1) = *rdp;
+	}
 
 	__size_class_count_g = wrp - __size_classes_g;
 
@@ -171,9 +180,17 @@ void __clean_size_classes(void)
 		);
 #else
 	for (; wrp < edp; ++wrp)
+	{
+		if (wrp + PREFETCH_STRUCTURE_LOOKAHEAD < edp)
+			PREFETCH_STRUCTURE(
+				wrp, CACHE_WRITE,
+				TEMPORAL_LOCALITY_HIGH
+			);
+
 		memset_constexpr(
 			wrp, 0, sizeof(size_class_t)
 		);
+	}
 #endif /* __has_builtin(__builtin_memset_inline) */
 #pragma clang diagnostic pop
 }
@@ -184,7 +201,7 @@ void __clean_size_classes(void)
  * Applies heuristics to better determine
  * the exact classes.
  */
-static _Thread_local ALWAYS_INLINE
+static FLATTEN
 size_class_t *__build_size_classes(void)
 {
 	static int initialized = 0;
@@ -216,7 +233,7 @@ size_class_t *__build_size_classes(void)
  * to store the array size (recommended),
  * otherwise pass `NULL`.
  */
-static _Thread_local ALWAYS_INLINE
+static ALWAYS_INLINE FLATTEN
 size_class_t *get_size_classes(size_t *count)
 {
 	__build_size_classes();
@@ -233,7 +250,7 @@ size_class_t *get_size_classes(size_t *count)
  * there was a previous size
  * class misconfiguration
  */
-static _Thread_local inline
+static HOT_CALL inline
 size_t get_size_class(size_t size)
 {
 	/* To clarify this convoluted and unsafe mess:

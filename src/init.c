@@ -10,17 +10,20 @@
 
 static int __is_lgmalloc_init_g = 0;
 
-static ALWAYS_INLINE void lgmalloc_set_init(int value)
+static ALWAYS_INLINE HOT_CALL
+void lgmalloc_set_init(int value)
 {
 	__is_lgmalloc_init_g = !!value;
 }
 
-static ALWAYS_INLINE int __lgmalloc_is_init(void)
+static ALWAYS_INLINE HOT_CALL
+int __lgmalloc_is_init(void)
 {
 	return __is_lgmalloc_init_g;
 }
 
 /* Exposing this for critical points that require extra safety */
+HOT_CALL FLATTEN
 int lgmalloc_is_init(void)
 {
 	return __lgmalloc_is_init();
@@ -79,11 +82,15 @@ void config_init(void)
 /* For scope and responsibility reasons this is
  * the only function that handles the init flags.
  * Either the caller handles the flag or the callee. */
+COLD_CALL
 void lgmalloc_init(void)
 {
 	/* More often than not will be initialized */
 	if (LIKELY(__lgmalloc_is_init()))
 		return;
+
+	/* Initialize CPU feature detection */
+	__builtin_cpu_init();
 
 	/* logic */
 

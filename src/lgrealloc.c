@@ -9,7 +9,7 @@
 #include "internal_headers/lgmalloc_global_include.h"
 #include "api/lgmalloc_config.h"
 
-static ALWAYS_INLINE
+static ALWAYS_INLINE HOT_CALL
 void *__lgrealloc_impl(void *ptr, size_t size)
 {
 }

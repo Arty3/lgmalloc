@@ -9,7 +9,7 @@
 #include "internal_headers/lgmalloc_global_include.h"
 #include "api/lgmalloc_config.h"
 
-static ALWAYS_INLINE
+static ALWAYS_INLINE HOT_CALL
 void __lgfree_impl(void *ptr)
 {
 #if !defined(MANUAL_HANDLE_LGMALLOC_INIT)

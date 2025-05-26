@@ -11,6 +11,7 @@
 #include <sys/mman.h>
 #include <errno.h>
 
+MALLOC_CALL(1) COLD_CALL
 void *memory_map(size_t size)
 {
 	void *memory_map = mmap(
@@ -38,7 +39,7 @@ void *memory_map(size_t size)
  * This function should be only be used by thread_ctx
  * to initialize the current thread context heap.
  */
-static inline
+static COLD_CALL FLATTEN inline
 heap_t *heap_init(void *__restrict__ allocation, size_t size)
 {
 	heap_t *heap = (heap_t*)allocation;

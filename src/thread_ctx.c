@@ -20,13 +20,15 @@ void __set_current_thread_heap(heap_t *heap)
 	__current_thread_heap_g = heap;
 }
 
-static ALWAYS_INLINE
+/* Highly predictable read and write
+ * patterns, so we can qualify as pure */
+static ALWAYS_INLINE PURE HOT_CALL
 heap_t *__unsafe_get_current_thread_heap(void)
 {
 	return __current_thread_heap_g;
 }
 
-ALWAYS_INLINE
+ALWAYS_INLINE HOT_CALL
 heap_t *__get_current_thread_heap(void)
 {
 	/* Avoid possible NULL in critical point. No weird unsafe
@@ -40,7 +42,7 @@ heap_t *__get_current_thread_heap(void)
 	return __unsafe_get_current_thread_heap();
 }
 
-ALWAYS_INLINE
+ALWAYS_INLINE COLD_CALL
 uintptr_t __get_tid(void)
 {
 #if !defined(__APPLE__) && (defined(__aarch64__) || defined(__x86_64__))
@@ -77,6 +79,14 @@ uintptr_t __get_tid(void)
 #endif
 	return tid;
 #endif
+}
+
+ALWAYS_INLINE HOT_CALL;
+uintptr_t __lgmalloc_get_tid(void)
+{
+	static _Thread_local
+	uintptr_t tid = __get_tid();
+	return tid;
 }
 
 /*
@@ -129,11 +139,12 @@ uintptr_t __get_tid(void)
  * allocator, which gives us a heuristic approach to optimize the
  * allocator to the program's requirements and life-span.
  */
-static void thread_ctx_init(void)
+static
+void thread_ctx_init(void)
 {
 	if (UNLIKELY(__unsafe_get_current_thread_heap()))
 		return;
 }
 
-EXTERN_STRONG_ALIAS(__get_tid, lgmalloc_get_tid);
+EXTERN_STRONG_ALIAS(__lgmalloc_get_tid, lgmalloc_get_tid);
 EXTERN_STRONG_ALIAS(__get_current_thread_heap, get_current_thread_heap);
