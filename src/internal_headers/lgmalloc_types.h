@@ -18,6 +18,7 @@ typedef unsigned long int __attribute__ ((__may_alias__)) word_t;
 typedef struct __block_t	block_t;
 typedef struct __chunk_t	chunk_t;
 typedef struct __segment_t	segment_t;
+typedef struct __mmap_t		mmap_t;
 typedef struct __heap_t		heap_t;
 
 /*
@@ -90,6 +91,18 @@ typedef struct __segment_t
 	uintptr_t			mmap_start;
 }	segment_t;
 
+/*
+ * Linked list holding all dedicated memory mappings.
+ * This helps simplify freeing process, since
+ * calling free on this will directly go to `munmap`
+ */
+typedef struct __mmap_t
+{
+	struct __mmap_t	*next;
+	void			*alloc;
+	size_t			size;
+}	mmap_t;
+
 /* 
  * Thread-unique structure holding all heap data 
  * This avoids atomic & locking overhead and
@@ -105,11 +118,39 @@ typedef struct __heap_t
 	uintptr_t		tid;
 	segment_t		*segment_list;
 	size_t			segment_count;
+	mmap_t			*mmap_list;
+	size_t			mmap_count;
 }	heap_t;
 
 #define LGMALLOC_BLOCK_T_SIZE	sizeof(block_t)
 #define LGMALLOC_CHUNK_T_SIZE	sizeof(chunk_t)
 #define LGMALLOC_SEGMENT_T_SIZE	sizeof(segment_t)
+#define LGMALLOC_MMAP_T_SIZE	sizeof(mmap_t)
 #define LGMALLOC_HEAP_T_SIZE	sizeof(heap_t)
+
+_Static_assert(
+	LGMALLOC_BLOCK_T_SIZE % sizeof(max_align_t) == 0,
+	"mmap_t size must preserve alignment"
+);
+_Static_assert(
+	LGMALLOC_CHUNK_T_SIZE % sizeof(max_align_t) == 0,
+	"mmap_t size must preserve alignment"
+);
+_Static_assert(
+	LGMALLOC_SEGMENT_T_SIZE % sizeof(max_align_t) == 0,
+	"mmap_t size must preserve alignment"
+);
+_Static_assert(
+	LGMALLOC_MMAP_T_SIZE % sizeof(max_align_t) == 0,
+	"mmap_t size must preserve alignment"
+);
+_Static_assert(
+	LGMALLOC_HEAP_T_SIZE % sizeof(max_align_t) == 0,
+	"mmap_t size must preserve alignment"
+);
+
+#define OFFSET_PTR(p, of)	(void*)((unsigned char*)(p) + (ptrdiff_t)(of))
+#define PTR_DIFF(a, b)		(ptrdiff_t)((const unsigned char*)(a) - \
+										(const unsigned char*)(b))
 
 #endif /* __LGMALLOC_TYPES_H */

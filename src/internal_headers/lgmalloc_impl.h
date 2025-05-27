@@ -13,11 +13,6 @@ void		lgmalloc_init(void);
 void		lgmalloc_reinit(void);
 int			lgmalloc_is_init(void);
 
-void		*memory_map(size_t size);
-
-uintptr_t	lgmalloc_get_tid(void);
-heap_t		*get_current_thread_heap(void);
-
 /* Wrappers for internal usage */
 
 void	*__lgmalloc_wrapper(size_t size);

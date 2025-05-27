@@ -7,6 +7,7 @@
 /* ******************************************** */
 
 #include "internal_headers/lgmalloc_global_include.h"
+#include "internal_headers/thread_ctx.h"
 #include "api/lgmalloc_config.h"
 
 #include <errno.h>
@@ -32,6 +33,12 @@ void *__lgmalloc_impl(size_t size)
 
 	if (UNLIKELY(!size))
 		return do_alloc_size_1();
+
+	const heap_t *heap = get_current_thread_heap();
+
+	ASSUME(heap);
+
+	return heap_alloc(heap, size);
 }
 
 MALLOC_CALL(1)

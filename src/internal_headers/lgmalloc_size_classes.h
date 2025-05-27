@@ -156,13 +156,6 @@ void __clean_size_classes(void)
 
 	for (; rdp < edp; ++rdp)
 	{
-		/* This prefetch needs to be double checked */
-		if (rdp + PREFETCH_STRUCTURE_LOOKAHEAD < edp)
-			PREFETCH_STRUCTURE(
-				rdp, CACHE_READ,
-				TEMPORAL_LOCALITY_HIGH
-			);
-
 		if (rdp->block_sz >= LGMALLOC_MMAP_THRESHOLD)
 			if (wrp++ != rdp)
 				*(wrp - 1) = *rdp;
@@ -181,13 +174,6 @@ void __clean_size_classes(void)
 #else
 	for (; wrp < edp; ++wrp)
 	{
-		/* This prefetch needs to be double checked */
-		if (wrp + PREFETCH_STRUCTURE_LOOKAHEAD < edp)
-			PREFETCH_STRUCTURE(
-				wrp, CACHE_WRITE,
-				TEMPORAL_LOCALITY_HIGH
-			);
-
 		memset_constexpr(
 			wrp, 0, sizeof(size_class_t)
 		);
@@ -225,6 +211,16 @@ size_class_t *__build_size_classes(void)
 	return __size_classes_g;
 }
 
+/*
+ * Get the current size of
+ * the size classes array
+ */
+static ALWAYS_INLINE FLATTEN
+size_t get_size_class_count(void)
+{
+	return __size_class_count_g;
+}
+
 /* Get the size class array.
  *
  * Will always return initialized
@@ -240,7 +236,7 @@ size_class_t *get_size_classes(size_t *count)
 	__build_size_classes();
 
 	if (LIKELY(count))
-		*count = __size_class_count_g;
+		*count = get_size_class_count();
 
 	return __size_classes_g;
 }
@@ -315,8 +311,7 @@ size_t get_size_class(size_t size)
 	/* INVARIANT: mathematically guaranteed most_sig_bit >= 6
 	 * Proof: size > GRANULARITY*64 → min_blk_cnt >= 65 → search_val >= 64
 	 * → most_sig_bit >= 6 (since 64 requires 7 bits, MSB at position 6) */
-	if (most_sig_bit < 6)
-		UNREACHABLE_BRANCH;
+	ASSUME(most_sig_bit >= 6);
 
 	const size_t cls = ((most_sig_bit << 2)  +
 		((search_val >> (most_sig_bit -  2)) & 0x03)) + 41;

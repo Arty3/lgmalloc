@@ -10,8 +10,42 @@
 #define __LGMALLOC_FEATURES_H
 
 /* Inlining features */
+
 #define NO_INLINE			__attribute__((noinline))
 #define ALWAYS_INLINE		__attribute__((always_inline))
+
+#define VOID_INLINE_CALL(call)											\
+	do																	\
+	{																	\
+		_Static_assert(													\
+			__builtin_types_compatible_p(typeof(call), void),			\
+			"`VOID_INLINE_CALL` is only compatible with void functions"	\
+		);																\
+		_Pragma("clang optimize push")									\
+		_Pragma("clang optimize \"-finline-functions\"")				\
+		(call);															\
+		_Pragma("clang optimize pop")									\
+	}	while (0)
+
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wgnu-statement-expression"
+#pragma clang diagnostic ignored "-Wgnu-statement-expression-from-macro-expansion"
+
+#define INLINE_CALL(call)										\
+	({															\
+		_Static_assert(											\
+			!__builtin_types_compatible_p(typeof(call), void),	\
+			"Cannot use `INLINE_CALL` with void function calls"	\
+		);														\
+		_Pragma("clang optimize push")							\
+		_Pragma("clang optimize \"-finline-functions\"")		\
+		typeof(call) __result = (call);							\
+		_Pragma("clang optimize pop")							\
+		__result;												\
+	})
+
+#pragma clang diagnostic pop
+
 /* Inlines all calls within function call stack */
 #define FLATTEN				__attribute__((flatten))
 
@@ -45,7 +79,7 @@
 			"Cleanup function " #f " signature mismatch for " #var		\
 		);																\
 		(void)0;														\
-	}	while(0);														\
+	}	while(0)														\
 	__attribute__((cleanup(f)))
 
 /* Thread Local Storage (TLS) heap model */
@@ -55,7 +89,8 @@
 #define LIKELY(x)			__builtin_expect(!!(x), 1)
 #define UNLIKELY(x)			__builtin_expect(!!(x), 0)
 /* Use to explicitly note that a code branch is unreachable */
-#define UNREACHABLE_BRANCH	__builtin_unreachable();
+#define UNREACHABLE_BRANCH	__builtin_unreachable()
+#define ASSUME(x)			__builtin_assume(!!(x))
 
 /* Initialize cpu microcode feature detection */
 static ALWAYS_INLINE FLATTEN COLD_CALL
@@ -70,8 +105,8 @@ void __init_cpu_feature_detection(void)
 	}
 }
 
-/* Check once at runtim for AVX2
- * microarchitecture specific optimizations */
+/* Check once at runtime for AVX2
+ * microarchitecture specific features */
 static _Thread_local TLS_MODEL
 int __cpu_supports_avx2_g =
 __builtin_cpu_supports("avx2");

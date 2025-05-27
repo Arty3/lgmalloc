@@ -1,0 +1,1 @@
+# Use LTO (-flto=thin / full)

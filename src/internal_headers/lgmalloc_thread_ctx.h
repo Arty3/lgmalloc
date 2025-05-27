@@ -1,16 +1,19 @@
 /* ******************************************** */
 /*                                              */
-/*   thread_ctx.c                               */
+/*   lgmalloc_thread_ctx.h                      */
 /*                                              */
 /*   Author: https://github.com/Arty3           */
 /*                                              */
 /* ******************************************** */
 
-#include "internal_headers/lgmalloc_global_include.h"
+#ifndef __LGMALLOC_THREAD_CTX_H
+#define __LGMALLOC_THREAD_CTX_H
+
+#include "lgmalloc_global_include.h"
 
 #include <sys/syscall.h>
+#include <stdint.h>
 
-/* Should be managed internally here */
 static _Thread_local TLS_MODEL
 heap_t *__current_thread_heap_g = 0;
 
@@ -20,8 +23,6 @@ void __set_current_thread_heap(heap_t *heap)
 	__current_thread_heap_g = heap;
 }
 
-/* Highly predictable read and write
- * patterns, so we can qualify as pure */
 static ALWAYS_INLINE PURE HOT_CALL
 heap_t *__unsafe_get_current_thread_heap(void)
 {
@@ -148,3 +149,5 @@ void thread_ctx_init(void)
 
 EXTERN_STRONG_ALIAS(__lgmalloc_get_tid, lgmalloc_get_tid);
 EXTERN_STRONG_ALIAS(__get_current_thread_heap, get_current_thread_heap);
+
+#endif /* __LGMALLOC_THREAD_CTX_H */
