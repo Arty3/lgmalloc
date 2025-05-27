@@ -96,10 +96,6 @@ int __is_already_zeroed_simd(void *p, size_t n)
 
 	for (; n >= 32; n -= 32)
 	{
-		PREFETCH_STRUCTURE(
-			v, CACHE_READ,
-			TEMPORAL_LOCALITY_HIGH
-		);
 		__m256i chunk = _mm256_loadu_si256(v++);
 		if (!_mm256_testz_si256(chunk, chunk))
 			return 0;

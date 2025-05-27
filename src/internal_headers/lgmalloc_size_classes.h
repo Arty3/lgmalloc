@@ -156,7 +156,7 @@ void __clean_size_classes(void)
 
 	for (; rdp < edp; ++rdp)
 	{
-		/* Load next cache line early */
+		/* This prefetch needs to be double checked */
 		if (rdp + PREFETCH_STRUCTURE_LOOKAHEAD < edp)
 			PREFETCH_STRUCTURE(
 				rdp, CACHE_READ,
@@ -181,6 +181,7 @@ void __clean_size_classes(void)
 #else
 	for (; wrp < edp; ++wrp)
 	{
+		/* This prefetch needs to be double checked */
 		if (wrp + PREFETCH_STRUCTURE_LOOKAHEAD < edp)
 			PREFETCH_STRUCTURE(
 				wrp, CACHE_WRITE,
@@ -269,7 +270,7 @@ size_t get_size_class(size_t size)
 	 * We calculate the position of the most significant bit,
 	 * since the minimum block count is now guaranteed to be
 	 * larger than 64, this position is guaranteed to be
-	 * larger or equal to 6, this is still checked though.
+	 * larger or equal to 6, this is explicitly optimized away.
 	 * 
 	 * Class sizes are then in the format `[...]000xxx000[...]`
 	 * where we already have the position of the most significant
@@ -311,8 +312,11 @@ size_t get_size_class(size_t size)
 	const size_t most_sig_bit = (size_t)(31 - __builtin_clz((unsigned int)search_val));
 #endif
 
-	if (UNLIKELY(most_sig_bit < 6))
-		return 0;
+	/* INVARIANT: mathematically guaranteed most_sig_bit >= 6
+	 * Proof: size > GRANULARITY*64 → min_blk_cnt >= 65 → search_val >= 64
+	 * → most_sig_bit >= 6 (since 64 requires 7 bits, MSB at position 6) */
+	if (most_sig_bit < 6)
+		UNREACHABLE_BRANCH;
 
 	const size_t cls = ((most_sig_bit << 2)  +
 		((search_val >> (most_sig_bit -  2)) & 0x03)) + 41;

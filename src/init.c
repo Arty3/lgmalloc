@@ -89,9 +89,6 @@ void lgmalloc_init(void)
 	if (LIKELY(__lgmalloc_is_init()))
 		return;
 
-	/* Initialize CPU feature detection */
-	__builtin_cpu_init();
-
 	/* logic */
 
 	lgmalloc_set_init(1);

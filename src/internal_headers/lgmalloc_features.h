@@ -33,26 +33,19 @@
 /* Calls the given function `f` on the variable `var`,
  * it will be called when the variable goes out of scope.
  * Expecting a function that takes `typeof(var)`*/
-#define DESTRUCTOR(var, f)																		\
-	_Pragma("clang diagnostic push");															\
-	_Pragma("clang diagnostic ignored \"-Wunused-value\"");										\
-	_Pragma("clang diagnostic ignored \"-Wtautological-compare\"");								\
-	_Pragma("clang diagnostic ignored \"-Wgnu-statement-expression\"");							\
-	_Pragma("clang diagnostic ignored \"-Wgnu-zero-variadic-macro-arguments\"");				\
-	_Pragma("clang diagnostic ignored \"-Wgnu-statement-expression-from-macro-expansion\"");	\
-	do																							\
-	{																							\
-		_Static_assert(																			\
-			_Generic(&(var), typeof(&(var)): 1, default: 0),									\
-			"Variable " #var " type check failed"												\
-		);																						\
-		_Static_assert(																			\
-			_Generic((f), void (*)(typeof(&(var))): 1, default: 0),								\
-			"Cleanup function " #f " signature mismatch for " #var								\
-		);																						\
-		(void)0;																				\
-	}	while(0);																				\
-	_Pragma("clang diagnostic pop");															\
+#define VAR_DESTRUCTOR(var, f)											\
+	do																	\
+	{																	\
+		_Static_assert(													\
+			_Generic(&(var), typeof(&(var)): 1, default: 0),			\
+			"Variable " #var " type check failed"						\
+		);																\
+		_Static_assert(													\
+			_Generic((f), void (*)(typeof(&(var))): 1, default: 0),		\
+			"Cleanup function " #f " signature mismatch for " #var		\
+		);																\
+		(void)0;														\
+	}	while(0);														\
 	__attribute__((cleanup(f)))
 
 /* Thread Local Storage (TLS) heap model */
@@ -64,14 +57,30 @@
 /* Use to explicitly note that a code branch is unreachable */
 #define UNREACHABLE_BRANCH	__builtin_unreachable();
 
+/* Initialize cpu microcode feature detection */
+static ALWAYS_INLINE FLATTEN COLD_CALL
+void __init_cpu_feature_detection(void)
+{
+	static int initialized;
+
+	if (LIKELY(!initialized))
+	{
+		__builtin_cpu_init();
+		initialized = 1;
+	}
+}
+
 /* Check once at runtim for AVX2
  * microarchitecture specific optimizations */
 static _Thread_local TLS_MODEL
-int __cpu_supports_avx2_g = __builtin_cpu_supports("avx2");
+int __cpu_supports_avx2_g =
+__builtin_cpu_supports("avx2");
 
 static ALWAYS_INLINE FLATTEN HOT_CALL
 int __cpu_supports_avx2(void)
 {
+	/* Only initializes once */
+	__init_cpu_feature_detection();
 	return __cpu_supports_avx2_g;
 }
 
