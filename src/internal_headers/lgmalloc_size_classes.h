@@ -33,7 +33,7 @@ typedef struct __size_class_t
 #define LGMALLOC_CHUNK_HEADER_SIZE			128
 #define LGMALLOC_SEGMENT_HEADER_SIZE		128
 
-_Static_assert(
+GUARANTEE(
 	LGMALLOC_CHUNK_HEADER_SIZE == LGMALLOC_SEGMENT_HEADER_SIZE,
 	"lgmalloc chunk and segment header sizes do not match"
 );
@@ -225,19 +225,11 @@ size_t get_size_class_count(void)
  *
  * Will always return initialized
  * and optimized size classes.
- *
- * Optionally pass a count pointer
- * to store the array size (recommended),
- * otherwise pass `NULL`.
  */
 static ALWAYS_INLINE FLATTEN
-size_class_t *get_size_classes(size_t *count)
+size_class_t *get_size_classes(void)
 {
 	__build_size_classes();
-
-	if (LIKELY(count))
-		*count = get_size_class_count();
-
 	return __size_classes_g;
 }
 
@@ -277,11 +269,10 @@ size_t get_size_class(size_t size)
 	 * the requested size and that we're not over-allocating.
 	 */
 
-	if (UNLIKELY(!size))
-		return 1;
+	GUARANTEE(size, "Size must not be 0");
 
-	size_t size_classes_count = 0;
-	size_class_t *size_classes = get_size_classes(&size_classes_count);
+	size_t size_classes_count  = get_size_class_count();
+	size_class_t *size_classes = get_size_classes();
 
 	if (UNLIKELY(!size_classes_count))
 		return size_classes_count;

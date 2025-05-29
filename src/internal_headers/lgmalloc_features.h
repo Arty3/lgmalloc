@@ -9,7 +9,8 @@
 #ifndef __LGMALLOC_FEATURES_H
 #define __LGMALLOC_FEATURES_H
 
-/* Inlining features */
+/* Note that these are compiler hints and directives,
+ * but they should also be hints for the developer */
 
 #define NO_INLINE			__attribute__((noinline))
 #define ALWAYS_INLINE		__attribute__((always_inline))
@@ -147,6 +148,89 @@ typedef enum __cache_read_write_e
 
 #define PREFETCH_PRIMITIVE(addr, rw, loc) \
 	__builtin_prefetch(addr, rw, loc);
+
+#ifdef _DEBUG
+
+/* Runtime assert only for debug builds */
+
+#include <assert.h>
+
+#define LGMALLOC_ASSERT(expected, message)				\
+	do													\
+	{													\
+		__builtin_choose_expr(							\
+			__builtin_constant_p(expected),				\
+			(sizeof(struct { _Static_assert((expected),	\
+				#message); char c; }) * 0),				\
+			(assert((expected) && message), 0)			\
+		);												\
+	}	while (0)
+
+#else
+
+#define LGMALLOC_ASSERT(expected, message)				\
+	do													\
+	{													\
+		__builtin_choose_expr(							\
+			__builtin_constant_p(expected),				\
+			(sizeof(struct { _Static_assert((expected),	\
+				#message); char c; }) * 0),				\
+			0											\
+		);												\
+	}	while (0)
+
+#endif /* _DEBUG */
+
+/* Guarantees conditions in implementation
+ * This must be enforced by the developer. */
+#define GUARANTEE(condition, message)			\
+	do											\
+	{											\
+		LGMALLOC_ASSERT(condition, message);	\
+		ASSUME(condition);						\
+	}	while (0)
+
+#define DISCARD_BRANCH	UNREACHABLE_BRANCH
+
+#define DISCARD_ARGS(...)								\
+	do													\
+	{													\
+		(void)(0 ? (void)(__VA_ARGS__, 0) : (void)0);	\
+	}	while (0)										\
+
+#define OFFSET_PTR(p, of)	(void*)((unsigned char*)(p) + (ptrdiff_t)(of))
+#define PTR_DIFF(a, b)		(ptrdiff_t)((const unsigned char*)(a) - \
+										(const unsigned char*)(b))
+
+/* power-of-2 alignments only */
+#define ALIGN_UP(value, alignment) \
+	(((value) + (alignment) - 1) & ~((alignment) - 1))
+
+#define ALIGN_DOWN(value, alignment) \
+	((value) & ~((alignment) - 1))
+
+/* Safe versions that work with any alignment (not just powers of 2) */
+#define ALIGN_UP_SAFE(value, alignment) \
+	((((value) + (alignment) - 1) / (alignment)) * (alignment))
+
+#define ALIGN_DOWN_SAFE(value, alignment) \
+	(((value) / (alignment)) * (alignment))
+
+/* Type-preserving versions (maintain input type) */
+#define ALIGN_UP_TYPED(value, alignment) \
+	(__typeof__(value))(((uintptr_t)(value) + (alignment) - 1) & ~((alignment) - 1))
+
+#define ALIGN_DOWN_TYPED(value, alignment) \
+	(__typeof__(value))((uintptr_t)(value) & ~((alignment) - 1))
+
+#define ALIGN_PTR_UP(ptr, alignment) \
+	((void *)(((uintptr_t)(ptr) + (alignment) - 1) & ~((alignment) - 1)))
+
+#define ALIGN_PTR_DOWN(ptr, alignment) \
+	((void *)((uintptr_t)(ptr) & ~((alignment) - 1)))
+
+#define IS_ALIGNED(value, alignment) \
+	(((uintptr_t)(value) & ((alignment) - 1)) == 0)
 
 /* Compile time constant implementations of `memcpy` and `memset` */
 #ifdef __has_builtin

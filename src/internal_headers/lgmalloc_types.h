@@ -128,29 +128,25 @@ typedef struct __heap_t
 #define LGMALLOC_MMAP_T_SIZE	sizeof(mmap_t)
 #define LGMALLOC_HEAP_T_SIZE	sizeof(heap_t)
 
-_Static_assert(
+GUARANTEE(
 	LGMALLOC_BLOCK_T_SIZE % sizeof(max_align_t) == 0,
-	"mmap_t size must preserve alignment"
+	"block_t size must preserve alignment"
 );
-_Static_assert(
+GUARANTEE(
 	LGMALLOC_CHUNK_T_SIZE % sizeof(max_align_t) == 0,
-	"mmap_t size must preserve alignment"
+	"chunk_t size must preserve alignment"
 );
-_Static_assert(
+GUARANTEE(
 	LGMALLOC_SEGMENT_T_SIZE % sizeof(max_align_t) == 0,
-	"mmap_t size must preserve alignment"
+	"segment_t size must preserve alignment"
 );
-_Static_assert(
+GUARANTEE(
 	LGMALLOC_MMAP_T_SIZE % sizeof(max_align_t) == 0,
 	"mmap_t size must preserve alignment"
 );
-_Static_assert(
+GUARANTEE(
 	LGMALLOC_HEAP_T_SIZE % sizeof(max_align_t) == 0,
-	"mmap_t size must preserve alignment"
+	"heap_t size must preserve alignment"
 );
-
-#define OFFSET_PTR(p, of)	(void*)((unsigned char*)(p) + (ptrdiff_t)(of))
-#define PTR_DIFF(a, b)		(ptrdiff_t)((const unsigned char*)(a) - \
-										(const unsigned char*)(b))
 
 #endif /* __LGMALLOC_TYPES_H */

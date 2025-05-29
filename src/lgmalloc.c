@@ -35,8 +35,7 @@ void *__lgmalloc_impl(size_t size)
 		return do_alloc_size_1();
 
 	const heap_t *heap = get_current_thread_heap();
-
-	ASSUME(heap);
+	GUARANTEE(heap, "heap must not be NULL");
 
 	return heap_alloc(heap, size);
 }

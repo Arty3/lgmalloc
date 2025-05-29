@@ -20,6 +20,7 @@ heap_t *__current_thread_heap_g = 0;
 static ALWAYS_INLINE
 void __set_current_thread_heap(heap_t *heap)
 {
+	GUARANTEE(heap, "Heap must not be NULL");
 	__current_thread_heap_g = heap;
 }
 
