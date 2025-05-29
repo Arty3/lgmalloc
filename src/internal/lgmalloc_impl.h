@@ -9,9 +9,12 @@
 #ifndef __LGMALLOC_IMPL_H
 #define __LGMALLOC_IMPL_H
 
-void		lgmalloc_init(void);
-void		lgmalloc_reinit(void);
-int			lgmalloc_is_init(void);
+NO_INLINE COLD_CALL FLATTEN
+void do_debug_tests(void);
+
+void lgmalloc_init(void);
+void lgmalloc_reinit(void);
+int	 lgmalloc_is_init(void);
 
 /* Wrappers for internal usage */
 

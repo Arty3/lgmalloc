@@ -6,7 +6,7 @@
 /*                                              */
 /* ******************************************** */
 
-#include "internal_headers/lgmalloc_global_include.h"
+#include "internal/lgmalloc_global_include.h"
 #include "api/lgmalloc_config.h"
 
 #include <immintrin.h>

@@ -6,8 +6,8 @@
 /*                                              */
 /* ******************************************** */
 
-#include "internal_headers/lgmalloc_global_include.h"
-#include "internal_headers/thread_ctx.h"
+#include "internal/lgmalloc_global_include.h"
+#include "internal/thread_ctx.h"
 #include "api/lgmalloc_config.h"
 
 #include <errno.h>

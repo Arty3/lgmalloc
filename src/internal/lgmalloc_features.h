@@ -9,6 +9,10 @@
 #ifndef __LGMALLOC_FEATURES_H
 #define __LGMALLOC_FEATURES_H
 
+#include <stddef.h>
+#include <stdint.h>
+#include <string.h>
+
 /* Note that these are compiler hints and directives,
  * but they should also be hints for the developer */
 

@@ -6,9 +6,9 @@
 /*                                              */
 /* ******************************************** */
 
-#include "internal_headers/lgmalloc_global_include.h"
-#include "internal_headers/lgmalloc_thread_ctx.h"
-#include "internal_headers/lgmalloc_size_classes.h"
+#include "internal/lgmalloc_global_include.h"
+#include "internal/lgmalloc_thread_ctx.h"
+#include "internal/lgmalloc_size_classes.h"
 
 #include <sys/mman.h>
 #include <errno.h>
