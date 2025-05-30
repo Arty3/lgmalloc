@@ -1,3 +1,4 @@
+# Object files and libraries
 *.o
 *.lo
 *.a
@@ -6,3 +7,79 @@
 
 !bin/
 !bin/**
+
+paper/acmguide.pdf
+
+# LaTeX auxiliary files
+*.aux
+*.bbl
+*.bcf
+*.blg
+*.fdb_latexmk
+*.fls
+*.log
+*.out
+*.run.xml
+*.synctex.gz
+*.toc
+*.lof
+*.lot
+*.idx
+*.ind
+*.ilg
+*.glg
+*.glo
+*.gls
+*.ist
+*.acn
+*.acr
+*.alg
+*.glsdefs
+*.lol
+*.nav
+*.snm
+*.vrb
+*.figlist
+*.makefile
+*.fignums
+
+# LaTeX build directories
+paper/build/
+paper/_minted-*/
+
+# LaTeX temporary files
+*.tmp
+*.backup
+*~
+
+# BibTeX files (keep .bib, ignore generated)
+*.bbl
+*.blg
+
+# PDF outputs (optional - you might want to keep the final PDF)
+# paper/*.pdf
+
+# VS Code LaTeX Workshop
+.vscode/settings.json
+
+# MiKTeX/TeXLive logs
+*.log
+*.synctex(busy)
+*.pdfsync
+
+# LaTeX Beamer
+*.nav
+*.snm
+*.vrb
+
+# Glossaries
+*.acn
+*.acr
+*.glg
+*.glo
+*.gls
+*.glsdefs
+*.lol
+*.idx
+*.ilg
+*.ind

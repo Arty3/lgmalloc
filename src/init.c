@@ -87,7 +87,7 @@ void lgmalloc_init(void)
 	/* Only compiled in debug builds */
 	do_debug_tests();
 
-	/* logic */
+	init_prof_system();
 
 	lgmalloc_set_init(1);
 }

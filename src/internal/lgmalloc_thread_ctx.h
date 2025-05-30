@@ -17,10 +17,10 @@
 static _Thread_local TLS_MODEL
 heap_t *__current_thread_heap_g = 0;
 
-static ALWAYS_INLINE
+static ALWAYS_INLINE COLD_CALL
 void __set_current_thread_heap(heap_t *heap)
 {
-	GUARANTEE(heap, "Heap must not be NULL");
+	GUARANTEE(heap, "heap must not be null");
 	__current_thread_heap_g = heap;
 }
 

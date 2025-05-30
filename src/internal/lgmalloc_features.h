@@ -87,6 +87,12 @@
 	}	while(0)														\
 	__attribute__((cleanup(f)))
 
+#define UNUSED	\
+	__attribute__((unused))
+
+#define DEPRECATED(message)	\
+	__attribute__((deprecated(message)))
+
 /* Thread Local Storage (TLS) heap model */
 #define TLS_MODEL			__attribute__((tls_model("initial-exec")))
 

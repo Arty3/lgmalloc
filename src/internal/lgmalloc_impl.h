@@ -12,6 +12,9 @@
 NO_INLINE COLD_CALL FLATTEN
 void do_debug_tests(void);
 
+NO_INLINE COLD_CALL FLATTEN
+void init_prof_system(void);
+
 void lgmalloc_init(void);
 void lgmalloc_reinit(void);
 int	 lgmalloc_is_init(void);
