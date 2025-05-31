@@ -19,6 +19,23 @@
 }
 
 \begin{abstract}
+  Memory allocation represents a critical bottleneck in multi-threaded applications.
+  Traditional allocators like \texttt{tcmalloc} suffer from central contention points
+  that limit scalability, while thread-local implementations require substantial
+  per-thread memory overhead.
+  \texttt{lgmalloc} shifts the demand-reactive paradigm that standard allocation
+  algorithms use, to a preemptive and predictive heuristic approach.
+  The approach leverages the fundamental observation that call sites demonstrate
+  predictable allocation patterns.
+  By parsing the executable's \texttt{ELF} format before the program's entry point,
+  \texttt{lgmalloc} performs static analysis of call sites to reveal allocation
+  patterns and generate confidence scores for size classes. Based on the confidence
+  scores, the system utilizes optimized code paths to the backend allocation API,
+  reducing allocation latency. When confidence scores are low, the system falls back to
+  reliable, standard allocation strategies. The thread-local design eliminates lock
+  contention while substantially reducing per-thread memory overhead by optimizing
+  the pre-allocated size classes each thread requires.
+
   \texttt{lgmalloc} is available at: \url{https://github.com/Arty3/lgmalloc}
 \end{abstract}
 
