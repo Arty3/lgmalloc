@@ -9,6 +9,9 @@
 !bin/**
 
 paper/acmguide.pdf
+paper/ACM-Reference-Format.bst
+paper/acmart.cls
+paper/software.bib
 
 # LaTeX auxiliary files
 *.aux
