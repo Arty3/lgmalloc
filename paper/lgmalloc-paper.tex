@@ -1,5 +1,33 @@
 \documentclass[sigconf,authordraft]{acmart}
 
+\usepackage{listings}
+\usepackage{enumitem}
+\usepackage{xcolor}
+
+\definecolor{keywordblue}{RGB}{0, 0, 150}
+\definecolor{commentgreen}{RGB}{0, 128, 0}
+\definecolor{stringred}{RGB}{163, 21, 21}
+
+\lstset{
+  language=C,
+  basicstyle=\ttfamily\footnotesize,
+  keywordstyle=\color{keywordblue}\bfseries,
+  commentstyle=\color{commentgreen}\itshape,
+  stringstyle=\color{stringred},
+  numberstyle=\tiny\color{gray},
+  numbers=left,
+  numbersep=5pt,
+  xleftmargin=10pt,
+  breaklines=true,
+  showstringspaces=false,
+  tabsize=2,
+  captionpos=b,
+  aboveskip=10pt,
+  belowskip=5pt,
+  escapeinside={(*@}{@*)},
+  morekeywords={malloc, free, GUARANTEE}
+}
+
 \AtBeginDocument{%
   \providecommand\BibTeX{{%
     Bib\TeX}}}
@@ -10,7 +38,7 @@
 
 \title{\texttt{lgmalloc}: Predictive Memory Allocator}
 
-\author{Luca Martijn Goddijn}
+\author{Luca M. Goddijn}
 \email{luca.goddijn@gmail.com}
 \affiliation{%
   \institution{Independent Researcher}
@@ -20,7 +48,7 @@
 
 \begin{abstract}
   Memory allocation represents a critical bottleneck in multi-threaded applications.
-  Traditional allocators like \texttt{tcmalloc} suffer from central contention points
+  Traditional allocators, like \texttt{tcmalloc}, suffer from central contention points
   that limit scalability, while thread-local implementations require substantial
   per-thread memory overhead.
   \texttt{lgmalloc} shifts the demand-reactive paradigm that standard allocation
@@ -39,23 +67,85 @@
   \texttt{lgmalloc} is available at: \url{https://github.com/Arty3/lgmalloc}
 \end{abstract}
 
-\keywords{memory allocation, static analysis, predictive optimization, thread-local storage, heuristics, heap}
+\keywords{memory allocation, heap, malloc, allocator, static analysis, predictive optimization, thread-local, heuristics}
 
 \maketitle
 
 \section{Introduction}
 
-\section{Background and Related Work}  
+As performance requirements scale, memory allocators face a rising trade-off barrier
+between memory efficiency and thread scalability. Existing and standardized allocators
+demonstrate a clear division: optimizing for performance or minimizing memory overhead.
+Both strategies significantly compromise in the opposing dimension.
+\texttt{tcmalloc}~\cite{tcmalloc} is Google's custom memory allocator, designed for
+high-performance infrastructure applications, while \texttt{mimalloc}~\cite{mimalloc2019}
+is Microsoft's general-purpose allocator which focuses on minimizing memory overhead.
+Both implementations clearly illustrate the fundamental trade-offs that limit current
+allocation strategies.
+
+These trade-offs manifest in concrete design choices. Performance-focused allocators
+like \texttt{tcmalloc} employ fundamental strategies like thread-local caches
+and per-size-class free lists to minimize lock contention, which comes at the cost of
+substantial memory overhead required to maintain these structures across threads.
+Conversely, memory-efficient implementations reduce per-thread allocation and
+utilize compact data structures. These sacrifice performance by bottlenecking
+critical contention points, which scale poorly at higher thread counts.
+The fundamental issue underlying these trade-offs is that the core principles
+allocators rely on are founded on a demand-reactive paradigm. This paradigm
+entails larger-than-needed allocations, organized in core data structures which
+are plagued by thread contention, or poor memory efficiency at scale.
+
+\texttt{lgmalloc} is a general-purpose \texttt{malloc(3)} implementation that
+addresses this paradigm by leveraging the fundamental observation
+that allocation call sites exhibit significant predictability. This observation
+introduces three key innovations: Static analysis, confidence-based routing and
+a thread-local design whose effectiveness emerges through its integration with
+the other two approaches. \texttt{lgmalloc} statically analyzes the executable's
+structure before the program's main entry point, predicting allocation patterns
+and creating optimized code paths for allocation logic. This approach offers
+significant optimization potential for the key trade-off elements.
+
+Consider an ideal scenario: a multi-threaded server where each thread allocates
+a compile-time constant size to process incoming data. The compile-time constant
+yields maximum confidence, constituting a perfectly optimized allocation system, 
+where each thread only allocates exactly what it requires. The confidence-based
+routing system can now perform a direct jump to the respective backend allocation
+API function, which follows linear and predictable logic, offering minimal side effects.
+In contrast, existing allocators face bottlenecks at scale, for example \texttt{tcmalloc}
+experiences high contention on its global free list~\cite{Lee:2014:TCMallocPerformance}
+and \texttt{jemalloc}~\cite{jemalloc2006} experiences significant memory overhead~\cite{Matias:2011:ComparativeStudy}
+
+The key contributions of this work are:
+\begin{itemize}[nosep]
+  \item A novel static analysis system for predicting allocation patterns
+  \item A confidence-based routing mechanism for optimized allocation paths
+  \item A thread-local design that minimizes both contention and memory overhead
+  \item Comprehensive evaluation showing [...] % Edit later
+\end{itemize}
+
+The remainder of this paper is organized as follows: Section~\ref{sec:background}
+surveys related work, Section~\ref{sec:design} presents the \texttt{lgmalloc}
+architecture, Section~\ref{sec:implementation} details key implementation aspects,
+Section~\ref{sec:evaluation} evaluates performance, Section~\ref{sec:discussion}
+discusses results and implications, and Section~\ref{sec:conclusion} concludes.
+
+\section{Background and Related Work}
+\label{sec:background}
 
 \section{System Design}
+\label{sec:design}
 
 \section{Implementation}
+\label{sec:implementation}
 
 \section{Evaluation}
+\label{sec:evaluation}
 
 \section{Discussion}
+\label{sec:discussion}
 
 \section{Conclusion}
+\label{sec:conclusion}
 
 \bibliographystyle{ACM-Reference-Format}
 \bibliography{references}

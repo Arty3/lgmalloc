@@ -4,6 +4,55 @@
   url={https://google.github.io/tcmalloc/}
 }
 
+@inproceedings{Lee:2014:TCMallocPerformance,
+	author = {Sangho Lee and Teresa L. Johnson and Easwaran Raman},
+	title = {{Feedback Directed Optimization of TCMalloc}},
+	booktitle = {Proceedings of the Workshop on Memory Systems Performance and Correctness},
+	year = {2014},
+	month = {June},
+	publisher = {ACM},
+	address = {New York, NY, USA},
+	doi = {10.1145/2618128.2618131},
+	url = {https://dl.acm.org/doi/10.1145/2618128.2618131},
+	note = {Study demonstrating performance bottlenecks in TCMalloc's central cache management and thread-local cache interactions}
+}
+
+@inproceedings{mimalloc2019,
+  title={mimalloc: Free List Sharding in Action},
+  author={Leijen, Daan},
+  booktitle={ISMM},
+  year={2019}
+}
+
+@inproceedings{jemalloc2006,
+  title={A scalable concurrent malloc(3) implementation for FreeBSD},
+  author={Evans, Jason},
+  booktitle={Proceedings of the BSDCan Conference},
+  year={2006},
+  address={Ottawa, Canada}
+}
+
+@inproceedings{Matias:2011:ComparativeStudy,
+	author = {Rivalino Matias Jr. and Autran Macedo and Luciano C. Serafim and Rodrigo M. Rocha and Felipe M. G. França},
+	title = {{An Experimental Study on Memory Allocators in Multicore and Multithreaded Applications}},
+	booktitle = {Proceedings of the 12th International Conference on Parallel and Distributed Computing, Applications and Technologies (PDCAT)},
+	year = {2011},
+	month = {October},
+	pages = {92--98},
+	publisher = {IEEE},
+	doi = {10.1109/PDCAT.2011.53},
+	url = {https://ieeexplore.ieee.org/document/6118957},
+	note = {Comparative study showing jemalloc's thread-cache behavior and memory consumption patterns in multithreaded scenarios}
+}
+
+@misc{Jansson:2017:rpmalloc,
+	author = {Mattias Jansson},
+	title = {{rpmalloc: Public Domain Cross Platform Lock Free Thread Caching 16-byte Aligned Memory Allocator}},
+	year = {2017},
+	url = {https://github.com/mjansson/rpmalloc},
+	note = {Version 1.4.5+, Public Domain License}
+}
+
 @inproceedings{snmalloc2019,
   title={snmalloc: A Message Passing Allocator},
   author={Liétor-Santos, Julián and others},
