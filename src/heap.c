@@ -29,14 +29,14 @@ void *memory_map(size_t size)
 {
 	GUARANTEE(size, "size must not be zero");
 
-	void *memory_map = mmap(
+	void *map = mmap(
 		NULL, size,
 		PROT_READ   | PROT_WRITE,
 		MAP_PRIVATE | MAP_ANONYMOUS,
 		-1, 0
 	);
 
-	if (memory_map == MAP_FAILED)
+	if (map == MAP_FAILED)
 	{
 		if (errno != EAGAIN)
 			errno  = ENOMEM;
@@ -44,7 +44,7 @@ void *memory_map(size_t size)
 		return NULL;
 	}
 
-	return memory_map;
+	return map;
 }
 
 static MALLOC_CALL(1) COLD_CALL
