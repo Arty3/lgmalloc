@@ -169,8 +169,38 @@ discusses results and implications, and Section~\ref{sec:conclusion} concludes.
 \section{Implementation}
 \label{sec:implementation}
 
+\subsection{Codebase Features}
+\label{sec:features}
+
+\subsection{Configuration System}
+
+\subsection{Build System and Compiler Integration}
+
+\texttt{lgmalloc} focuses on maintaining a simple and comprehensive build system.
+The approach uses a single GNU Make-based makefile~\cite{stallman2020make},
+prioritizing directness and uniformity over modular complexity. The makefile performs
+platform compliance verification to ensure Unix/POSIX compatibility and \texttt{ELF}
+support through runtime checks, since the implementation relies on those components
+being present for its innovative approach to memory allocation.
+
+The \texttt{release} and \texttt{debug} targets generate optimized and development
+builds respectively, with \texttt{release} serving as the default target to
+prioritize production-ready binaries. The choice of compilers reflects distinct
+optimization and reliability philosophies: \texttt{debug} builds utilize Clang for
+its superior diagnostic capabilities, faster compilation times, and comprehensive error
+reporting~\cite{clang_diagnostics,lattner2004llvm}, making it ideal for development
+iterations where issue identification takes precedence over optimization. Conversely,
+\texttt{release} builds employ GCC for its more sophisticated optimization
+framework~\cite{colfax2017compiler}, leveraging \texttt{-flto=full} for link-time
+optimization. These compiler choices enable \texttt{lgmalloc}'s extensive use of
+compiler attributes and built-ins (Section~\ref{sec:features}) made possible by
+the \texttt{GNU17} standard~\cite{iso2018c17}, while strict warning-as-error
+policies ensure high code quality standards.
+
 \section{Evaluation}
 \label{sec:evaluation}
+
+\subsection{Behavioral Unit Testing}
 
 \section{Discussion}
 \label{sec:discussion}

@@ -1,61 +1,117 @@
 @misc{tcmalloc,
-  title={TCMalloc: Thread-Caching Malloc},
-  author={Google},
-  url={https://google.github.io/tcmalloc/}
+ title        = {TCMalloc: Thread-Caching Malloc},
+ author       = {Google},
+ url          = {https://google.github.io/tcmalloc/}
 }
 
 @inproceedings{Lee:2014:TCMallocPerformance,
-	author = {Sangho Lee and Teresa L. Johnson and Easwaran Raman},
-	title = {{Feedback Directed Optimization of TCMalloc}},
-	booktitle = {Proceedings of the Workshop on Memory Systems Performance and Correctness},
-	year = {2014},
-	month = {June},
-	publisher = {ACM},
-	address = {New York, NY, USA},
-	doi = {10.1145/2618128.2618131},
-	url = {https://dl.acm.org/doi/10.1145/2618128.2618131},
-	note = {Study demonstrating performance bottlenecks in TCMalloc's central cache management and thread-local cache interactions}
+ author       = {Sangho Lee and Teresa L. Johnson and Easwaran Raman},
+ title        = {{Feedback Directed Optimization of TCMalloc}},
+ booktitle    = {Proceedings of the Workshop on Memory Systems Performance and Correctness},
+ year         = {2014},
+ month        = {June},
+ publisher    = {ACM},
+ address      = {New York, NY, USA},
+ doi          = {10.1145/2618128.2618131},
+ url          = {https://dl.acm.org/doi/10.1145/2618128.2618131},
+ note         = {Study demonstrating performance bottlenecks in TCMalloc's central cache management and thread-local cache interactions}
 }
 
 @inproceedings{mimalloc2019,
-  title={mimalloc: Free List Sharding in Action},
-  author={Leijen, Daan},
-  booktitle={ISMM},
-  year={2019}
+ title        = {mimalloc: Free List Sharding in Action},
+ author       = {Leijen, Daan},
+ booktitle    = {ISMM},
+ year         = {2019}
 }
 
 @inproceedings{jemalloc2006,
-  title={A scalable concurrent malloc(3) implementation for FreeBSD},
-  author={Evans, Jason},
-  booktitle={Proceedings of the BSDCan Conference},
-  year={2006},
-  address={Ottawa, Canada}
+ title        = {A scalable concurrent malloc(3) implementation for FreeBSD},
+ author       = {Evans, Jason},
+ booktitle    = {Proceedings of the BSDCan Conference},
+ year         = {2006},
+ address      = {Ottawa, Canada}
 }
 
 @inproceedings{Matias:2011:ComparativeStudy,
-	author = {Rivalino Matias Jr. and Autran Macedo and Luciano C. Serafim and Rodrigo M. Rocha and Felipe M. G. França},
-	title = {{An Experimental Study on Memory Allocators in Multicore and Multithreaded Applications}},
-	booktitle = {Proceedings of the 12th International Conference on Parallel and Distributed Computing, Applications and Technologies (PDCAT)},
-	year = {2011},
-	month = {October},
-	pages = {92--98},
-	publisher = {IEEE},
-	doi = {10.1109/PDCAT.2011.53},
-	url = {https://ieeexplore.ieee.org/document/6118957},
-	note = {Comparative study showing jemalloc's thread-cache behavior and memory consumption patterns in multithreaded scenarios}
+ author       = {Rivalino Matias Jr. and Autran Macedo and Luciano C. Serafim and Rodrigo M. Rocha and Felipe M. G. França},
+ title        = {{An Experimental Study on Memory Allocators in Multicore and Multithreaded Applications}},
+ booktitle    = {Proceedings of the 12th International Conference on Parallel and Distributed Computing, Applications and Technologies (PDCAT)},
+ year         = {2011},
+ month        = {October},
+ pages        = {92--98},
+ publisher    = {IEEE},
+ doi          = {10.1109/PDCAT.2011.53},
+ url          = {https://ieeexplore.ieee.org/document/6118957},
+ note         = {Comparative study showing jemalloc's thread-cache behavior and memory consumption patterns in multithreaded scenarios}
 }
 
 @misc{Jansson:2017:rpmalloc,
-	author = {Mattias Jansson},
-	title = {{rpmalloc: Public Domain Cross Platform Lock Free Thread Caching 16-byte Aligned Memory Allocator}},
-	year = {2017},
-	url = {https://github.com/mjansson/rpmalloc},
-	note = {Version 1.4.5+, Public Domain License}
+ author       = {Mattias Jansson},
+ title        = {{rpmalloc: Public Domain Cross Platform Lock Free Thread Caching 16-byte Aligned Memory Allocator}},
+ year         = {2017},
+ url          = {https://github.com/mjansson/rpmalloc},
+ note         = {Version 1.4.5+, Public Domain License}
 }
 
 @inproceedings{snmalloc2019,
-  title={snmalloc: A Message Passing Allocator},
-  author={Liétor-Santos, Julián and others},
-  booktitle={ISMM},
-  year={2019}
+ title        = {snmalloc: A Message Passing Allocator},
+ author       = {Liétor-Santos, Julián and others},
+ booktitle    = {ISMM},
+ year         = {2019}
+}
+
+@manual{stallman2020make,
+ title        = {GNU Make: A Program for Directing Recompilation},
+ author       = {Stallman, Richard M. and McGrath, Roland and Smith, Paul D.},
+ organization = {Free Software Foundation},
+ year         = {2020},
+ edition      = {4.3},
+ url          = {https://www.gnu.org/software/make/manual/},
+ note         = {Version 4.3}
+}
+
+@misc{clang_diagnostics,
+  title        = {Expressive Diagnostics},
+  author       = {{LLVM Project}},
+  url          = {https://clang.llvm.org/diagnostics.html},
+  note         = {Clang's diagnostic system documentation}
+}
+
+@inproceedings{lattner2004llvm,
+  title        = {LLVM: A Compilation Framework for Lifelong Program Analysis \& Transformation},
+  author       = {Lattner, Chris and Adve, Vikram},
+  booktitle    = {International Symposium on Code Generation and Optimization},
+  year         = {2004},
+  pages        = {75--86},
+  publisher    = {IEEE},
+  doi          = {10.1109/CGO.2004.1281665},
+  url          = {https://www.researchgate.net/publication/4065384_LLVM_A_Compilation_Framework_for_Lifelong_Program_Analysis_Transformation}
+}
+
+@techreport{fhs2015,
+  title        = {Filesystem Hierarchy Standard},
+  author       = {{FHS Group}},
+  institution  = {Linux Foundation},
+  year         = {2015},
+  version      = {3.0},
+  url          = {https://refspecs.linuxfoundation.org/FHS_3.0/fhs-3.0.html},
+  note         = {Version 3.0}
+}
+
+@techreport{colfax2017compiler,
+  title        = {Compiler Comparison: GCC vs. Intel vs. Clang},
+  author       = {{Colfax Research}},
+  institution  = {Colfax Research},
+  year         = {2017},
+  url          = {https://colfaxresearch.com/compiler-comparison/},
+  note         = {Performance comparison of GCC, Intel C++ Compiler, and Clang across various benchmarks}
+}
+
+@techreport{iso2018c17,
+  title        = {Information technology -- Programming languages -- C},
+  author       = {{ISO/IEC}},
+  institution  = {International Organization for Standardization},
+  year         = {2018},
+  number       = {ISO/IEC 9899:2018},
+  note         = {C17 standard with GNU extensions (GNU17)}
 }

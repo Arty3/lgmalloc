@@ -23,6 +23,10 @@ PREFIX				?= /usr/local
 LIBDIR				:= $(PREFIX)/lib
 INCDIR				:= $(PREFIX)/include/$(LIB_NAME)
 
+# Source files and headers are explicitly hardcoded rather
+# than dynamically discovered to mitigate supply chain
+# injection vulnerabilities
+
 # Source files
 SOURCES				:= src/heap.c		\
 					   src/heuristics.c	\
