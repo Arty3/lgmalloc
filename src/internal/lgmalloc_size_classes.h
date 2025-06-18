@@ -10,9 +10,8 @@
 #define __LGMALLOC_SIZE_CLASSES_H
 
 #include "lgmalloc_features.h"
+#include "lgmalloc_config.h"
 #include "lgmalloc_types.h"
-
-#include "api/lgmalloc_config.h"
 
 #include <stddef.h>
 #include <stdint.h>

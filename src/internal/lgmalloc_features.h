@@ -19,6 +19,36 @@
 #define NO_INLINE			__attribute__((noinline))
 #define ALWAYS_INLINE		__attribute__((always_inline))
 
+#if defined(__GNUC__) && defined(__GNUC_PATCHLEVEL__)
+#define VOID_INLINE_CALL(call)											\
+	do																	\
+	{																	\
+		_Static_assert(													\
+			__builtin_types_compatible_p(typeof(call), void),			\
+			"`VOID_INLINE_CALL` is only compatible with void functions"	\
+		);																\
+		_Pragma("gcc optimize push")									\
+		_Pragma("gcc optimize \"-finline-functions\"")					\
+		(call);															\
+		_Pragma("gcc optimize pop")										\
+	}	while (0)
+#pragma gcc diagnostic push
+#pragma gcc diagnostic ignored "-Wgnu-statement-expression"
+#pragma gcc diagnostic ignored "-Wgnu-statement-expression-from-macro-expansion"
+#define INLINE_CALL(call)										\
+	({															\
+		_Static_assert(											\
+			!__builtin_types_compatible_p(typeof(call), void),	\
+			"Cannot use `INLINE_CALL` with void function calls"	\
+		);														\
+		_Pragma("gcc optimize push")							\
+		_Pragma("gcc optimize \"-finline-functions\"")			\
+		typeof(call) __result = (call);							\
+		_Pragma("gcc optimize pop")								\
+		__result;												\
+	})
+#pragma gcc diagnostic pop
+#elif defined(__GNUC__) && defined(__clang__)
 #define VOID_INLINE_CALL(call)											\
 	do																	\
 	{																	\
@@ -31,11 +61,9 @@
 		(call);															\
 		_Pragma("clang optimize pop")									\
 	}	while (0)
-
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wgnu-statement-expression"
 #pragma clang diagnostic ignored "-Wgnu-statement-expression-from-macro-expansion"
-
 #define INLINE_CALL(call)										\
 	({															\
 		_Static_assert(											\
@@ -48,8 +76,10 @@
 		_Pragma("clang optimize pop")							\
 		__result;												\
 	})
-
 #pragma clang diagnostic pop
+#else
+#error "Only the GCC and clang compilers are supported"
+#endif
 
 /* Inlines all calls within function call stack */
 #define FLATTEN				__attribute__((flatten))

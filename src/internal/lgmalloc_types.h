@@ -12,7 +12,7 @@
 #include <stddef.h>
 #include <stdint.h>
 
-typedef unsigned long int __attribute__ ((__may_alias__)) word_t;
+typedef unsigned long int __attribute__((__may_alias__)) word_t;
 
 /* Forward decls */
 typedef struct __block_t	block_t;
