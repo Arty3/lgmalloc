@@ -98,6 +98,6 @@ You can apply the [configuration](#-configuration) flags to the build system.
 - Incompatible with the C89 Standard
 
 ## 📃 License
-This project uses the `GNU GENERAL PUBLIC LICENSE v3.0` license
+This project uses the `MIT License` license
 <br>
 For more info, please find the `LICENSE` file here: [License](LICENSE)
