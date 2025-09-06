@@ -13,8 +13,7 @@
 #include <stdint.h>
 #include <string.h>
 
-/* Note that these are compiler hints and directives,
- * but they should also be hints for the developer */
+#define API_CALL			__attribute__((visibility("default")))
 
 #define NO_INLINE			__attribute__((noinline))
 #define ALWAYS_INLINE		__attribute__((always_inline))
@@ -117,11 +116,11 @@
 	}	while(0)														\
 	__attribute__((cleanup(f)))
 
-#define UNUSED	\
-	__attribute__((unused))
+/* Is unused */
+#define UNUSED				__attribute__((unused))
 
-#define DEPRECATED(message)	\
-	__attribute__((deprecated(message)))
+/* Mark function deprecation */
+#define DEPRECATED(message)	__attribute__((deprecated(message)))
 
 /* Thread Local Storage (TLS) heap model */
 #define TLS_MODEL			__attribute__((tls_model("initial-exec")))
@@ -129,9 +128,26 @@
 /* Optimizing compilation target based on probability of logic */
 #define LIKELY(x)			__builtin_expect(!!(x), 1)
 #define UNLIKELY(x)			__builtin_expect(!!(x), 0)
+#define COND_PROB(x, p)		__builtin_expect_with_probability(!!(x), 1, p)
 /* Use to explicitly note that a code branch is unreachable */
 #define UNREACHABLE_BRANCH	__builtin_unreachable()
 #define ASSUME(x)			__builtin_assume(!!(x))
+
+/* Check types at compile time*/
+#define IS_SAME_TYPE(a, b)	__builtin_types_compatible_p(typeof(a), typeof(b))
+
+/* Pack data */
+#define PACKED				__attribute__((packed))
+
+/* Switch statement case falls through */
+#define FALLTHROUGH			__attribute__((fallthrough))
+
+/* Restrict pointer in function */
+#define RESTRICT			__restrict__
+
+/* Function arguments not null */
+#define NO_NULL_ARGS		__attribute__((nonnull))
+#define NON_NULL_ARGS(...)	__attribute__((nonnull(__VA_ARGS__)))
 
 /* Initialize cpu microcode feature detection */
 static ALWAYS_INLINE FLATTEN COLD_CALL

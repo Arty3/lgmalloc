@@ -51,10 +51,9 @@ typedef struct __lgmalloc_prof_site_t
 static _Thread_local TLS_MODEL
 prof_config_t *__current_thread_config_g = 0;
 
-static ALWAYS_INLINE COLD_CALL
+static ALWAYS_INLINE COLD_CALL NO_NULL_ARGS
 void __set_current_thread_config(prof_config_t *config)
 {
-	GUARANTEE(config, "config must not be NULL");
 	__current_thread_config_g = config;
 }
 

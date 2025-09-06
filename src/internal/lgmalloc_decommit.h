@@ -87,30 +87,22 @@
 
 #endif /* LGMALLOC_ENABLE_DECOMMIT */
 
-static ALWAYS_INLINE COLD_CALL
+static ALWAYS_INLINE COLD_CALL NO_NULL_ARGS
 void vm_decommit(void *ptr, size_t size)
 {
 #ifdef LGMALLOC_ENABLE_DECOMMIT
-
-	GUARANTEE(ptr,  "ptr must not be null");
 	GUARANTEE(size, "size must not be 0");
-
 	__vm_decommit(ptr, size);
-
 #else
-
 	DISCARD_ARGS(ptr, size);
 	DISCARD_BRANCH;
-
 #endif /* LGMALLOC_ENABLE_DECOMMIT */
 }
 
-static ALWAYS_INLINE COLD_CALL
+static ALWAYS_INLINE COLD_CALL NO_NULL_ARGS
 void vm_decommit_aligned(void *ptr, size_t size)
 {
 #ifdef LGMALLOC_ENABLE_DECOMMIT
-
-	GUARANTEE(ptr,  "ptr must not be null");
 	GUARANTEE(size, "size must not be 0");
 
 	uintptr_t start = (uintptr_t)ptr;
@@ -123,12 +115,9 @@ void vm_decommit_aligned(void *ptr, size_t size)
 		return;
 
 	__vm_decommit((void*)page_start, page_end - page_start);
-
 #else
-
 	DISCARD_ARGS(ptr, size);
 	DISCARD_BRANCH;
-
 #endif /* LGMALLOC_ENABLE_DECOMMIT */
 }
 

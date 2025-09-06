@@ -14,11 +14,9 @@
 #include <stdint.h>
 #include <errno.h>
 
-static ALWAYS_INLINE FLATTEN
+static ALWAYS_INLINE FLATTEN NO_NULL_ARGS
 void *__memzero_avx2(void *p, size_t n)
 {
-	GUARANTEE(p, "p must not be null");
-
 	__m256i zeros = _mm256_setzero_si_256();
 	unsigned char *s = (unsigned char *p);
 
@@ -39,13 +37,11 @@ void *__memzero_avx2(void *p, size_t n)
 }
 
 /* Check how many bytes are still needed to be cleared */
-static FLATTEN inline
-size_t __bytes_to_clear(void *__restrict__ p, size_t n)
+static FLATTEN inline NO_NULL_ARGS
+size_t __bytes_to_clear(void *p, size_t n)
 {
 	if (n < PAGE_SIZE)
 		return n;
-
-	GUARANTEE(p, "p must not be null");
 
 #ifdef __GNUC__
 #if defined(LGMALLOC_64_BIT)
@@ -77,13 +73,11 @@ size_t __bytes_to_clear(void *__restrict__ p, size_t n)
 	}
 }
 
-static ALWAYS_INLINE FLATTEN
+static ALWAYS_INLINE FLATTEN NO_NULL_ARGS
 int __is_already_zeroed_simd(void *p, size_t n)
 {
-	GUARANTEE(p, "p must not be null");
-
-	const unsigned char *s = (const unsigned char *)p;
-	uintptr_t misalign = (uintptr_t)s & 31;
+	const unsigned char *s	= (const unsigned char *)p;
+	uintptr_t misalign		= (uintptr_t)s & 31;
 
 	if (misalign)
 	{
@@ -116,11 +110,9 @@ int __is_already_zeroed_simd(void *p, size_t n)
 }
 
 /* Check if buffer is zeroed out with SIMD-like approach for larger buffers */
-static inline HOT_CALL FLATTEN
+static inline HOT_CALL FLATTEN NO_NULL_ARGS
 int __is_already_zeroed(void *p, size_t n)
 {
-	GUARANTEE(p, "p must not be null");
-
 	if (__cpu_supports_avx2())
 		return __is_already_zeroed_simd(p, n);
 
@@ -159,10 +151,8 @@ int __is_already_zeroed(void *p, size_t n)
 	
 	s = (const unsigned char *)w;
 	while (n--)
-	{
 		if (*s++)
 			return 0;
-	}
 	
 	return 1;
 }

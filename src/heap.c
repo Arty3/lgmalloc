@@ -70,10 +70,10 @@ mmap_t *get_dedicated_mmap(size_t size)
 	return map;
 }
 
-static COLD_CALL
+static COLD_CALL NO_NULL_ARGS
 void store_dedicated_mmap(
-	heap_t *__restrict__ heap,
-	mmap_t *__restrict__ map)
+	heap_t *RESTRICT heap,
+	mmap_t          *map)
 {
 	/* Avoid prefetching since the function is a cold call,
 	 * the datastructures are decently small and will likely
@@ -83,9 +83,6 @@ void store_dedicated_mmap(
 	 * hot since the heap and map are constantly being
 	 * used in the call graph. So prefetching here would
 	 * almost double the instruction cycles. */
-
-	GUARANTEE(heap, "heap must not be null");
-	GUARANTEE(map,  "map must not be null");
 
 	if (UNLIKELY(!heap->mmap_list))
 	{
@@ -110,11 +107,9 @@ void store_dedicated_mmap(
  * This function should be only be used by thread_ctx
  * to initialize the current thread context heap.
  */
-static COLD_CALL FLATTEN inline
-heap_t *heap_init(void *__restrict__ alloc, size_t size)
+static COLD_CALL FLATTEN inline NO_NULL_ARGS
+heap_t *heap_init(void *alloc, size_t size)
 {
-	GUARANTEE(alloc, "alloc must not be null");
-
 	if (UNLIKELY(size < sizeof(heap_t)))
 		return NULL;
 
@@ -126,10 +121,9 @@ heap_t *heap_init(void *__restrict__ alloc, size_t size)
 	return heap;
 }
 
-static MALLOC_CALL(2) ALWAYS_INLINE
-void *do_tiny_alloc(heap_t *__restrict__ heap, size_t size)
+static MALLOC_CALL(2) ALWAYS_INLINE NO_NULL_ARGS
+void *do_tiny_alloc(heap_t *RESTRICT heap, size_t size)
 {
-	GUARANTEE(heap, "heap must not be null");
 	GUARANTEE(size, "size must not be 0");
 
 	ASSUME(size <= LGMALLOC_TINY_THRESHOLD);
@@ -145,10 +139,9 @@ void *do_tiny_alloc(heap_t *__restrict__ heap, size_t size)
 	return block;
 }
 
-static NO_INLINE MALLOC_CALL(2)
-void *heap_alloc_mmap(heap_t *__restrict__ heap, size_t size)
+static NO_INLINE MALLOC_CALL(2) NO_NULL_ARGS
+void *heap_alloc_mmap(heap_t *heap, size_t size)
 {
-	GUARANTEE(heap, "heap must not be null");
 	GUARANTEE(size, "size must not be 0");
 
 	mmap_t *map = get_dedicated_mmap(size);
@@ -161,12 +154,10 @@ void *heap_alloc_mmap(heap_t *__restrict__ heap, size_t size)
 	return OFFSET_PTR(map->alloc, LGMALLOC_MMAP_T_SIZE);
 }
 
-MALLOC_CALL(2) ALWAYS_INLINE
-void *regular_heap_alloc(heap_t *__restrict__ heap, size_t size)
+MALLOC_CALL(2) ALWAYS_INLINE NO_NULL_ARGS
+void *regular_heap_alloc(heap_t *heap, size_t size)
 {
-	GUARANTEE(heap, "heap must not be null");
 	GUARANTEE(size, "size must not be 0");
-
 	ASSUME(size > LGMALLOC_TINY_THRESHOLD);
 
 	size_t class = get_size_class(size);
@@ -190,10 +181,9 @@ void *regular_heap_alloc(heap_t *__restrict__ heap, size_t size)
 	return heap_alloc_mmap(heap, size);
 }
 
-MALLOC_CALL(2) HOT_CALL NO_INLINE
-void *heap_alloc(heap_t *__restrict__ heap, size_t size)
+MALLOC_CALL(2) HOT_CALL NO_INLINE NO_NULL_ARGS
+void *heap_alloc(heap_t *heap, size_t size)
 {
-	GUARANTEE(heap, "heap must not be null");
 	GUARANTEE(size, "size must not be 0");
 
 	if (size <= LGMALLOC_TINY_THRESHOLD)

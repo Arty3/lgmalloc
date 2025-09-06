@@ -95,7 +95,7 @@ allocators rely on are founded on a demand-reactive paradigm. This paradigm
 entails larger-than-needed allocations, organized in core data structures which
 are plagued by thread contention, or poor memory efficiency at scale.
 
-\texttt{lgmalloc} is a general-purpose \texttt{malloc(3)} implementation that
+\texttt{lgmalloc} is an infrastructure-focused \texttt{malloc(3)} implementation that
 addresses this paradigm by leveraging the fundamental observation
 that allocation call sites exhibit significant predictability. This observation
 introduces three key innovations: Static analysis, confidence-based routing and
@@ -132,75 +132,14 @@ discusses results and implications, and Section~\ref{sec:conclusion} concludes.
 \section{Background and Related Work}
 \label{sec:background}
 
-\subsection{Evolution of Memory Allocation Strategies}
-% Early allocators
-% First generation improvements
-% Modern approaches
-% Presistent limitations
-
-\subsection{Allocation Pattern Predictability}
-% Evidence of core observation
-% programming conventions that create predictable patterns
-% system interface constraints
-% library imposed patterns
-
-\subsection{Static Analysis for Runtime Optimization}
-% Profile-guided optimization in compilers
-% Predictive resource management
-% Static analysis for memory optimization (if exists)
-
-\subsection{Compiler Techniques in Runtime Systems}
-% Compile-time vs. runtime trade-offs
-% Ahead-of-time optimization strategies
-% Static analysis frameworks relevant to ELF approach
-
-\subsection{Benchmarking Methodologies}
-% Discuss how allocator benchmarking is standardized
-
-\subsection{Security Considerations}
-% Discuss security related topics in allocators
-
-\subsection{Constrained Systems}
-% How to handle these
-
 \section{System Design}
 \label{sec:design}
 
 \section{Implementation}
 \label{sec:implementation}
 
-% \subsection{Codebase Features}
-% \label{sec:features}
-
-% \subsection{Configuration System}
-
-% \subsection{Build System and Compiler Integration}
-
-% \texttt{lgmalloc} focuses on maintaining a simple and comprehensive build system.
-% The approach uses a single GNU Make-based makefile~\cite{stallman2020make},
-% prioritizing directness and uniformity over modular complexity. The makefile performs
-% platform compliance verification to ensure Unix/POSIX compatibility and \texttt{ELF}
-% support through runtime checks, since the implementation relies on those components
-% being present for its innovative approach to memory allocation.
-
-% The \texttt{release} and \texttt{debug} targets generate optimized and development
-% builds respectively, with \texttt{release} serving as the default target to
-% prioritize production-ready binaries. The choice of compilers reflects distinct
-% optimization and reliability philosophies: \texttt{debug} builds utilize Clang for
-% its superior diagnostic capabilities, faster compilation times, and comprehensive error
-% reporting~\cite{clang_diagnostics,lattner2004llvm}, making it ideal for development
-% iterations where issue identification takes precedence over optimization. Conversely,
-% \texttt{release} builds employ GCC for its more sophisticated optimization
-% framework~\cite{colfax2017compiler}, leveraging \texttt{-flto=full} for link-time
-% optimization. These compiler choices enable \texttt{lgmalloc}'s extensive use of
-% compiler attributes and built-ins (Section~\ref{sec:features}) made possible by
-% the \texttt{GNU17} standard~\cite{iso2018c17}, while strict warning-as-error
-% policies ensure high code quality standards.
-
 \section{Evaluation}
 \label{sec:evaluation}
-
-\subsection{Behavioral Unit Testing}
 
 \section{Discussion}
 \label{sec:discussion}

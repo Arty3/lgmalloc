@@ -154,11 +154,9 @@ void __clean_size_classes(void)
 							  __size_class_count_g;
 
 	for (; rdp < edp; ++rdp)
-	{
 		if (rdp->block_sz >= LGMALLOC_MMAP_THRESHOLD)
 			if (wrp++ != rdp)
 				*(wrp - 1) = *rdp;
-	}
 
 	__size_class_count_g = wrp - __size_classes_g;
 
@@ -172,11 +170,9 @@ void __clean_size_classes(void)
 		);
 #else
 	for (; wrp < edp; ++wrp)
-	{
 		memset_constexpr(
 			wrp, 0, sizeof(size_class_t)
 		);
-	}
 #endif /* __has_builtin(__builtin_memset_inline) */
 #pragma clang diagnostic pop
 }
